@@ -11,5 +11,8 @@ String name = EnglishNameGenerator.getInstance().generate();
 # 地址
 String generatedAddress = ChineseAddressGenerator.getInstance().generate();
 ```
+
+### 报告
+
 ![Alt text](./report.jpg "测试报告")
 
