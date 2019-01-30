@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="classes">
+    <listeners>
+        <listener class-name="listener.AnnotationTransformer"/>
+        <listener class-name="listener.ExtentTestNGIReporterListener"/>
+    </listeners>
+    <test verbose="2" preserve-order="true" name="TestDebug">
+
+        <classes>
+            <class name="SearchTest"/>
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->
