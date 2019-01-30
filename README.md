@@ -10,6 +10,8 @@ String name = ChineseNameGenerator.getInstance().generate();
 String name = EnglishNameGenerator.getInstance().generate();
 # 地址
 String generatedAddress = ChineseAddressGenerator.getInstance().generate();
+# 手机号码
+String phoneNum = ChineseMobileNumberGenerator.getInstance().generate();
 ```
 
 ### 报告

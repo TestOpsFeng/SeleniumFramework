@@ -3,6 +3,8 @@ package page;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +15,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
@@ -28,6 +31,7 @@ public abstract class BasePage {
 
     /**
      * 打开页面，等待3秒是为了防止还没登陆获取token就跳转新页面
+     *
      * @param url
      */
     public void openPage(String url) {
@@ -37,7 +41,54 @@ public abstract class BasePage {
     }
 
     /**
+     * select选择方法
+     * @param by
+     * @return
+     */
+    public String randomSelect(By by) {
+        WebElement elementWithTimeout = findElementWithTimeout(by);
+        Select select = new Select(elementWithTimeout);
+        List<WebElement> options = select.getOptions();
+        int i = new Random().nextInt(options.size() - 1);
+        String text = options.get(i).getText();
+        select.selectByVisibleText(text);
+        return text;
+    }
+
+    /**
+     * 针对公司编辑页面写的select方法
+     * @param by
+     * @return
+     */
+    public String myRandomSelect(By by){
+        click(by);
+        By select_subCon_first = By.xpath("//div[@style=\"position: absolute; top: 0px; left: 0px; width: 100%;\"]");
+        List<WebElement> list = findElementsWithTimeout(select_subCon_first);
+        int size = list.size();
+        By select_subCon_second = By.xpath("//div[@style=\"position: absolute; top: 0px; left: 0px; width: 100%;\"]["+size+"]/div/div/div/ul/li");
+        List<WebElement> li_list = findElementsWithTimeout(select_subCon_second);
+        int randomSubCon = random(0, li_list.size());
+        String text = li_list.get(randomSubCon).getText();
+        logger.info(this.getClass().getSimpleName() + ": Select Text： " + text);
+        li_list.get(randomSubCon).click();
+        return text;
+    }
+
+    /**
+     * 随机数，包含left，和right
+     * @param left
+     * @param right
+     * @return
+     */
+    public int random(int left,int right){
+        int i = new Random().nextInt(right - left) + left;
+        logger.info(this.getClass().getSimpleName() + ": Random int: " + i);
+        return i;
+    }
+
+    /**
      * 滑动到元素可见
+     *
      * @param by
      */
     public void scrollToElement(By by) {
@@ -68,6 +119,7 @@ public abstract class BasePage {
 
     /**
      * 查找元素，默认等待10秒
+     *
      * @param by
      * @return
      */
@@ -77,6 +129,7 @@ public abstract class BasePage {
 
     /**
      * 等待元素，找到元素后返回
+     *
      * @param by
      * @param timeout
      * @return
@@ -86,7 +139,6 @@ public abstract class BasePage {
 
         try {
             logger.info(this.getClass().getSimpleName() + ": Find element：" + by.toString());
-            //当元素可点击时才
             webElement = (WebElement) (new WebDriverWait(this.driver, timeout)).until(ExpectedConditions.elementToBeClickable(by));
             return webElement;
         } catch (TimeoutException var6) {
@@ -99,7 +151,39 @@ public abstract class BasePage {
     }
 
     /**
+     * 封装查找一个集合的元素
+     * @param by
+     * @return
+     */
+    public List<WebElement> findElementsWithTimeout(By by) {
+        return findElementsWithTimeout(by, 10);
+    }
+
+    /**
+     * 封装查找一个集合的元素
+     * @param by
+     * @param timeout
+     * @return
+     */
+    public List<WebElement> findElementsWithTimeout(By by, long timeout) {
+        List<WebElement> webElements = null;
+        try {
+            logger.info(this.getClass().getSimpleName() + ": Find elements：" + by.toString());
+            new WebDriverWait(this.driver, timeout).until(ExpectedConditions.presenceOfElementLocated(by));
+            webElements = driver.findElements(by);
+            return webElements;
+        } catch (TimeoutException var6) {
+            logger.error(this.getClass().getSimpleName() + ": Can not find elements: " + by.toString());
+            throw new TimeoutException("没有找到元素: " + by.toString());
+        } catch (NullPointerException var7) {
+            logger.error(this.getClass().getSimpleName() + ": Can not find elements: " + by.toString());
+            throw new NullPointerException("没有找到元素: " + by.toString());
+        }
+    }
+
+    /**
      * 封装sleep方法
+     *
      * @param millis
      */
     public void sleep(long millis) {
@@ -130,14 +214,16 @@ public abstract class BasePage {
 
     /**
      * 等待loading，避免selenium行为被拦截
+     *
      * @param by
      */
-    public void waitForLoading(By by){
+    public void waitForLoading(By by) {
         logger.info(this.getClass().getSimpleName() + ": Waiting for loading：" + by.toString());
-        while (true){
+        while (true) {
             try {
-                new WebDriverWait(this.driver, 3).until(ExpectedConditions.presenceOfElementLocated(by));
-            }catch (TimeoutException e){
+                new WebDriverWait(this.driver, 4).until(ExpectedConditions.elementToBeClickable(by));
+                sleep(1500);
+            } catch (TimeoutException e) {
                 return;
             }
         }
@@ -145,6 +231,7 @@ public abstract class BasePage {
 
     /**
      * 点击元素
+     *
      * @param by
      */
     public void click(By by) {
@@ -155,6 +242,7 @@ public abstract class BasePage {
 
     /**
      * 输入文字
+     *
      * @param by
      * @param text
      */
@@ -166,6 +254,7 @@ public abstract class BasePage {
 
     /**
      * 清理input后，再输入text
+     *
      * @param by
      * @param text
      */
@@ -179,13 +268,13 @@ public abstract class BasePage {
 
     /**
      * 获取元素的文本text()
+     *
      * @param by
      * @return
      */
     public String getText(By by) {
+        WebElement webElement = this.findElementWithTimeout(by);
         logger.info(this.getClass().getSimpleName() + ": Get Text in element: " + by.toString());
-        String text = this.findElementWithTimeout(by).getText();
-        logger.info(this.getClass().getSimpleName() + ": Get Text: "+ text);
-        return text;
+        return webElement.getText();
     }
 }

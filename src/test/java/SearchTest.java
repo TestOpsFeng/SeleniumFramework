@@ -1,4 +1,5 @@
 import cn.binarywang.tools.generator.ChineseNameGenerator;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import page.BaiduPage;
 
@@ -10,7 +11,7 @@ public class SearchTest extends BaseSetup {
         baiduPage.clickSearch(generate);
 
         String searchResult = baiduPage.getSearchResult();
-        assert searchResult.contains(generate);
+        Assert.assertEquals(searchResult,generate);
     }
 
 }
