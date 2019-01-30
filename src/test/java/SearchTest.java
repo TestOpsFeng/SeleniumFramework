@@ -1,3 +1,4 @@
+import cn.binarywang.tools.generator.ChineseNameGenerator;
 import org.testng.annotations.Test;
 import page.BaiduPage;
 
@@ -5,9 +6,11 @@ public class SearchTest extends BaseSetup {
 
     @Test(description = "搜索是否正常")
     public void testSearch() {
-        baiduPage.clickSearch(config.getString("searchText"));
+        String generate = ChineseNameGenerator.getInstance().generate();
+        baiduPage.clickSearch(generate);
+
         String searchResult = baiduPage.getSearchResult();
-        assert searchResult.contains(config.getString("searchText"));
+        assert searchResult.contains(generate);
     }
 
 }
