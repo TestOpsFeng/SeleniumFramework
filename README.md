@@ -120,3 +120,8 @@ String expectPassportAddress = ChineseIDCardNumberGenerator.generateIssueOrg();
 ### 报告
 ![Alt text](./report.png "测试报告")
 
+### 总结
+- TestNG暴露的接口很实用，并发机制也很省事
+- TestNG还能做到更多，例如我没有去实现的数据驱动
+- 日志很重要，好的日志体系可以迅速定位问题
+- docker对于环境搭建很方便
