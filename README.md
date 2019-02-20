@@ -125,3 +125,4 @@ String expectPassportAddress = ChineseIDCardNumberGenerator.generateIssueOrg();
 - TestNG还能做到更多，例如我没有去实现的数据驱动
 - 日志很重要，好的日志体系可以迅速定位问题
 - docker对于环境搭建很方便
+- 感谢所有乐于分享的人
