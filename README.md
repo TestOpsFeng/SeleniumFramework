@@ -106,6 +106,17 @@ private By first_search_result = By.xpath("//div[@id=\"1\"]/h3");
     </test> <!-- Test -->
 </suite> <!-- Suite -->
 ```
+随机数据生成器使用：
+```$java
+//英文名
+String expectEngGeneratorName = EnglishNameGenerator.getInstance().generate();
+//中文名
+String expectChiGeneratorName = ChineseNameGenerator.getInstance().generate();
+//手机号码
+String expectPhoneNum = ChineseMobileNumberGenerator.getInstance().generate();
+//地址
+String expectPassportAddress = ChineseIDCardNumberGenerator.generateIssueOrg();
+```
 ### 报告
 ![Alt text](./report.png "测试报告")
 
