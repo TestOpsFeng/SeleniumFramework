@@ -16,5 +16,5 @@ String phoneNum = ChineseMobileNumberGenerator.getInstance().generate();
 
 ### 报告
 
-![Alt text](./report.jpg "测试报告")
+![Alt text](./report.png "测试报告")
 

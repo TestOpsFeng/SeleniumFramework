@@ -17,6 +17,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Reporter;
 
 /**
  * page的父类，封装了日志体系，等待元素体系
@@ -36,12 +37,13 @@ public abstract class BasePage {
      */
     public void openPage(String url) {
         this.sleep(3000L);
-        logger.info(this.getClass().getSimpleName() + ": Navigate to: " + url);
+       logger.info(this.getClass().getSimpleName() + ": Navigate to: " + url);
         this.driver.navigate().to(url);
     }
 
     /**
-     * select选择方法
+     * 针对select的随机选择方法
+     *
      * @param by
      * @return
      */
@@ -52,20 +54,22 @@ public abstract class BasePage {
         int i = new Random().nextInt(options.size() - 1);
         String text = options.get(i).getText();
         select.selectByVisibleText(text);
+       logger.info(this.getClass().getSimpleName() + ": Select Text： " + text);
         return text;
     }
 
     /**
      * 针对公司编辑页面写的select方法
+     *
      * @param by
      * @return
      */
-    public String myRandomSelect(By by){
+    public String myRandomSelect(By by) {
         click(by);
         By select_subCon_first = By.xpath("//div[@style=\"position: absolute; top: 0px; left: 0px; width: 100%;\"]");
         List<WebElement> list = findElementsWithTimeout(select_subCon_first);
         int size = list.size();
-        By select_subCon_second = By.xpath("//div[@style=\"position: absolute; top: 0px; left: 0px; width: 100%;\"]["+size+"]/div/div/div/ul/li");
+        By select_subCon_second = By.xpath("//div[@style=\"position: absolute; top: 0px; left: 0px; width: 100%;\"][" + size + "]/div/div/div/ul/li");
         List<WebElement> li_list = findElementsWithTimeout(select_subCon_second);
         int randomSubCon = random(0, li_list.size());
         String text = li_list.get(randomSubCon).getText();
@@ -75,12 +79,41 @@ public abstract class BasePage {
     }
 
     /**
+     * 随机获取element集合中的某一个
+     *
+     * @param by
+     * @return
+     */
+    public WebElement getRandomElement(By by) {
+        List<WebElement> list = findElementsWithTimeout(by);
+        int size = list.size();
+        int randomNum = random(0, size);
+        WebElement element = list.get(randomNum);
+        logger.info(this.getClass().getSimpleName() + ": Select Text： " + element.getText());
+        return element;
+    }
+
+    /**
+     * 针对公司datepicker的方法
+     *
+     * @param by
+     */
+    public void selectDate(By by, String date) {
+        click(by);
+        By text_date = By.xpath("//a[text()='Today']");
+        sleep(1500);
+        click(text_date);
+        //a[text()="Today"]
+    }
+
+    /**
      * 随机数，包含left，和right
+     *
      * @param left
      * @param right
      * @return
      */
-    public int random(int left,int right){
+    public int random(int left, int right) {
         int i = new Random().nextInt(right - left) + left;
         logger.info(this.getClass().getSimpleName() + ": Random int: " + i);
         return i;
@@ -145,13 +178,14 @@ public abstract class BasePage {
             logger.error(this.getClass().getSimpleName() + ": Can not find element: " + by.toString());
             throw new TimeoutException("没有找到元素: " + by.toString());
         } catch (NullPointerException var7) {
-            logger.error(this.getClass().getSimpleName() + ": Can not find element: " + by.toString());
+            logger.error( this.getClass().getSimpleName() + ": Can not find element: " + by.toString());
             throw new NullPointerException("没有找到元素: " + by.toString());
         }
     }
 
     /**
      * 封装查找一个集合的元素
+     *
      * @param by
      * @return
      */
@@ -161,6 +195,7 @@ public abstract class BasePage {
 
     /**
      * 封装查找一个集合的元素
+     *
      * @param by
      * @param timeout
      * @return
@@ -168,15 +203,15 @@ public abstract class BasePage {
     public List<WebElement> findElementsWithTimeout(By by, long timeout) {
         List<WebElement> webElements = null;
         try {
-            logger.info(this.getClass().getSimpleName() + ": Find elements：" + by.toString());
+           logger.info(this.getClass().getSimpleName() + ": Find elements：" + by.toString());
             new WebDriverWait(this.driver, timeout).until(ExpectedConditions.presenceOfElementLocated(by));
             webElements = driver.findElements(by);
             return webElements;
         } catch (TimeoutException var6) {
-            logger.error(this.getClass().getSimpleName() + ": Can not find elements: " + by.toString());
+            logger.error( this.getClass().getSimpleName() + ": Can not find elements: " + by.toString());
             throw new TimeoutException("没有找到元素: " + by.toString());
         } catch (NullPointerException var7) {
-            logger.error(this.getClass().getSimpleName() + ": Can not find elements: " + by.toString());
+            logger.error( this.getClass().getSimpleName() + ": Can not find elements: " + by.toString());
             throw new NullPointerException("没有找到元素: " + by.toString());
         }
     }
@@ -184,11 +219,11 @@ public abstract class BasePage {
     /**
      * 封装sleep方法
      *
-     * @param millis
+     * @param millis 毫秒
      */
     public void sleep(long millis) {
         try {
-            logger.info(this.getClass().getSimpleName() + ": Sleep in " + millis / 1000L + " seconds");
+           logger.info(this.getClass().getSimpleName() + ": Sleep in " + millis / 1000L + " seconds");
             Thread.sleep(millis);
         } catch (InterruptedException var4) {
             var4.printStackTrace();
@@ -218,12 +253,13 @@ public abstract class BasePage {
      * @param by
      */
     public void waitForLoading(By by) {
-        logger.info(this.getClass().getSimpleName() + ": Waiting for loading：" + by.toString());
-        while (true) {
+       logger.info(this.getClass().getSimpleName() + ": Waiting for loading：" + by.toString());
+        for (int i = 0; i < 20; i++) {
             try {
                 new WebDriverWait(this.driver, 4).until(ExpectedConditions.elementToBeClickable(by));
                 sleep(1500);
             } catch (TimeoutException e) {
+                sleep(1000);
                 return;
             }
         }
@@ -236,7 +272,7 @@ public abstract class BasePage {
      */
     public void click(By by) {
         WebElement webElement = this.findElementWithTimeout(by);
-        logger.info(this.getClass().getSimpleName() + ": Click element: " + by.toString());
+       logger.info(this.getClass().getSimpleName() + ": Click element: " + by.toString());
         webElement.click();
     }
 
@@ -248,7 +284,7 @@ public abstract class BasePage {
      */
     public void sendKeys(By by, String text) {
         WebElement webElement = this.findElementWithTimeout(by);
-        logger.info(this.getClass().getSimpleName() + ": SendKeys to element: " + by.toString());
+       logger.info(this.getClass().getSimpleName() + ": SendKeys to element: " + by.toString());
         webElement.sendKeys(new CharSequence[]{text});
     }
 
@@ -260,9 +296,9 @@ public abstract class BasePage {
      */
     public void sendKeysAfterClear(By by, String text) {
         WebElement webElement = this.findElementWithTimeout(by);
-        logger.info(this.getClass().getSimpleName() + ": Clear text for element: " + by.toString());
+       logger.info(this.getClass().getSimpleName() + ": Clear text for element: " + by.toString());
         webElement.clear();
-        logger.info(this.getClass().getSimpleName() + ": SendKeys to element: " + by.toString());
+       logger.info(this.getClass().getSimpleName() + ": SendKeys to element: " + by.toString());
         webElement.sendKeys(new CharSequence[]{text});
     }
 
@@ -274,7 +310,18 @@ public abstract class BasePage {
      */
     public String getText(By by) {
         WebElement webElement = this.findElementWithTimeout(by);
-        logger.info(this.getClass().getSimpleName() + ": Get Text in element: " + by.toString());
+       logger.info(this.getClass().getSimpleName() + ": Get Text in element: " + by.toString());
         return webElement.getText();
+    }
+
+    public void ExecJs(String js) {
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
+        executor.executeScript(js);
+    }
+
+    public String getAttr(By by, String attrKey) {
+        WebElement webElement = this.findElementWithTimeout(by);
+       logger.info(this.getClass().getSimpleName() + ": Get " + attrKey + " in element: " + by.toString());
+        return webElement.getAttribute("value");
     }
 }

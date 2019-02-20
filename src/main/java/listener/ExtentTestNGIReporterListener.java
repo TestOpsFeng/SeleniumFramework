@@ -50,7 +50,7 @@ public class ExtentTestNGIReporterListener implements IReporter {
     }
 
     private void init() {
-        System.out.println("报表path： " +OUTPUT_FOLDER + FILE_NAME);
+        System.out.println(OUTPUT_FOLDER + FILE_NAME);
         //报表路径
         ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(OUTPUT_FOLDER + FILE_NAME);
         //文档名称

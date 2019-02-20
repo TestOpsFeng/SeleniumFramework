@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Suite" parallel="classes">
+<suite name="Suite" parallel="tests" thread-count="2">
     <listeners>
         <listener class-name="listener.AnnotationTransformer"/>
         <listener class-name="listener.ExtentTestNGIReporterListener"/>
+        <listener class-name="listener.MyITestListener"/>
     </listeners>
-    <test verbose="2" preserve-order="true" name="TestDebug">
-
+    <test verbose="2" preserve-order="true" name="chrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="SearchTest"/>
+        </classes>
+    </test> <!-- Test -->
+    <test verbose="2" preserve-order="true" name="firfox">
+        <parameter name="browser" value="firfox"/>
         <classes>
             <class name="SearchTest"/>
         </classes>

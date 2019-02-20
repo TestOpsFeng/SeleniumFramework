@@ -24,7 +24,7 @@
 
         <!--         这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
         <RollingFile name="RollingFile" fileName="./src/main/java/logs/log4j2.log"
-                     filePattern="./src/main/java/logs/$${date:yyyy-MM}/web-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="./src/main/java/logs/$${date:yyyy-MM}/web-%d{MM-dd-yyyy}-%i.logs.gz">
             <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level - %msg%xEx%n"/>
             <SizeBasedTriggeringPolicy size="2MB"/>
         </RollingFile>
