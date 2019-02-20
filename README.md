@@ -57,30 +57,30 @@ private By first_search_result = By.xpath("//div[@id=\"1\"]/h3");
 ```
 在class中编写方法：
 ```$java
-    //方法管理页面的行为
-    public void clickSearch(String searchText) {
-        sendKeys(input_serch,searchText);
-        click(btn_search);
-    }
+//方法管理页面的行为
+public void clickSearch(String searchText) {
+    sendKeys(input_serch,searchText);
+    click(btn_search);
+}
 ```
 在BaseSetup的initPage中：
 ```$java
-    //同一创建page对象
-    public void initPage() {
-        this.baiduPage = new BaiduPage(this.driver);
-    }
+//同一创建page对象
+public void initPage() {
+    this.baiduPage = new BaiduPage(this.driver);
+}
 ```
 在test/java中新建一个class：
 ```$java
-    //测试报告会使用description作为用例名称，如没有，则使用方法名
-    @Test(description = "搜索是否正常")
-    public void testSearch() {
-        String generate = ChineseNameGenerator.getInstance().generate();
-        baiduPage.clickSearch(generate);
+//测试报告会使用description作为用例名称，如没有，则使用方法名
+@Test(description = "搜索是否正常")
+public void testSearch() {
+    String generate = ChineseNameGenerator.getInstance().generate();
+    baiduPage.clickSearch(generate);
 
-        String searchResult = baiduPage.getSearchResult();
-        Assert.assertEquals(searchResult,generate);
-    }
+    String searchResult = baiduPage.getSearchResult();
+    Assert.assertEquals(searchResult,generate);
+}
 ```
 最后要并发远程调用浏览器需要使用testng.xml运行：
 ```$xml
@@ -116,6 +116,30 @@ String expectChiGeneratorName = ChineseNameGenerator.getInstance().generate();
 String expectPhoneNum = ChineseMobileNumberGenerator.getInstance().generate();
 //地址
 String expectPassportAddress = ChineseIDCardNumberGenerator.generateIssueOrg();
+```
+该框架使用在jenkins上通过maven运行在pom.xml需要加入两个plugin：
+```$xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>2.3.2</version>
+    <configuration>
+        <source>8</source>
+        <target>8</target>
+    </configuration>
+</plugin>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>2.7</version>
+    <configuration>
+        <useSystemClassLoader>false</useSystemClassLoader>
+        <!--用于配置maven test时跑testng.xml-->
+        <suiteXmlFiles>
+            <suiteXmlFile>./src/main/resources/testng.xml</suiteXmlFile>
+        </suiteXmlFiles>
+    </configuration>
+</plugin>
 ```
 ### 报告
 ![Alt text](./report.png "测试报告")
