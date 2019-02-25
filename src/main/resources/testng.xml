@@ -6,16 +6,38 @@
         <listener class-name="listener.ExtentTestNGIReporterListener"/>
         <listener class-name="listener.MyITestListener"/>
     </listeners>
-    <test verbose="2" preserve-order="true" name="chrome">
+    <test verbose="0" preserve-order="true" name="chrome">
         <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="SearchTest"/>
+            <class name="SearchTest">
+                <!--<methods>-->
+                <!--&lt;!&ndash;<include name="testEditCustomWorkerSelect"/>&ndash;&gt;-->
+                <!--<include name="testEditDate"/>-->
+                <!--</methods>-->
+            </class>
         </classes>
     </test> <!-- Test -->
     <test verbose="2" preserve-order="true" name="firfox">
-        <parameter name="browser" value="firfox"/>
+        <parameter name="browser" value="firefox"/>
         <classes>
-            <class name="SearchTest"/>
+            <class name="SearchTest">
+                <!--<methods>-->
+                <!--&lt;!&ndash;<include name="testEditCustomWorkerSelect"/>&ndash;&gt;-->
+                <!--<include name="testEditInput"/>-->
+                <!--</methods>-->
+            </class>
         </classes>
     </test> <!-- Test -->
+    <!--<test verbose="2" preserve-order="true" name="ie">-->
+    <!--<parameter name="browser" value="ie"/>-->
+    <!--<classes>-->
+    <!--<class name="Profile2Test"/>-->
+    <!--</classes>-->
+    <!--</test> &lt;!&ndash; Test &ndash;&gt;-->
+    <!--<test verbose="2" preserve-order="true" name="edge">-->
+    <!--<parameter name="browser" value="edge"/>-->
+    <!--<classes>-->
+    <!--<class name="Profile2Test"/>-->
+    <!--</classes>-->
+    <!--</test>-->
 </suite> <!-- Suite -->

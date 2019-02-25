@@ -5,15 +5,12 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -24,7 +21,6 @@ import org.testng.Reporter;
  */
 public abstract class BasePage {
     private WebDriver driver;
-    private static final Logger logger = LogManager.getLogger(Test.class.getName());
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
@@ -37,7 +33,7 @@ public abstract class BasePage {
      */
     public void openPage(String url) {
         this.sleep(3000L);
-       logger.info(this.getClass().getSimpleName() + ": Navigate to: " + url);
+        Reporter.log(this.getClass().getSimpleName() + ": Navigate to: " + url,true);
         this.driver.navigate().to(url);
     }
 
@@ -54,7 +50,7 @@ public abstract class BasePage {
         int i = new Random().nextInt(options.size() - 1);
         String text = options.get(i).getText();
         select.selectByVisibleText(text);
-       logger.info(this.getClass().getSimpleName() + ": Select Text： " + text);
+        Reporter.log(this.getClass().getSimpleName() + ": Select Text： " + text,true);
         return text;
     }
 
@@ -73,7 +69,7 @@ public abstract class BasePage {
         List<WebElement> li_list = findElementsWithTimeout(select_subCon_second);
         int randomSubCon = random(0, li_list.size());
         String text = li_list.get(randomSubCon).getText();
-        logger.info(this.getClass().getSimpleName() + ": Select Text： " + text);
+        Reporter.log(this.getClass().getSimpleName() + ": Select Text： " + text,true);
         li_list.get(randomSubCon).click();
         return text;
     }
@@ -89,7 +85,7 @@ public abstract class BasePage {
         int size = list.size();
         int randomNum = random(0, size);
         WebElement element = list.get(randomNum);
-        logger.info(this.getClass().getSimpleName() + ": Select Text： " + element.getText());
+        Reporter.log(this.getClass().getSimpleName() + ": Select Text： " + element.getText(),true);
         return element;
     }
 
@@ -115,7 +111,7 @@ public abstract class BasePage {
      */
     public int random(int left, int right) {
         int i = new Random().nextInt(right - left) + left;
-        logger.info(this.getClass().getSimpleName() + ": Random int: " + i);
+        Reporter.log(this.getClass().getSimpleName() + ": Random int: " + i,true);
         return i;
     }
 
@@ -127,8 +123,52 @@ public abstract class BasePage {
     public void scrollToElement(By by) {
         WebElement element = this.findElementWithTimeout(by);
         JavascriptExecutor je = (JavascriptExecutor) this.driver;
-        logger.info(this.getClass().getSimpleName() + ": Scroll to: " + by);
+        Reporter.log(this.getClass().getSimpleName() + ": Scroll to: " + element.getText(),true);
         je.executeScript("arguments[0].scrollIntoView(true);", new Object[]{element});
+    }
+
+    /**
+     * 滑动到元素可见
+     *
+     * @param element
+     */
+    public void scrollToElement(WebElement element) {
+        JavascriptExecutor je = (JavascriptExecutor) this.driver;
+        Reporter.log(this.getClass().getSimpleName() + ": Scroll to: " + element.getText(),true);
+        je.executeScript("arguments[0].scrollIntoView(true);", new Object[]{element});
+    }
+
+    /**
+     * 使用actions点击
+     *
+     * @param by
+     */
+    public void clickAction(By by) {
+        WebElement element = findElementWithTimeout(by);
+        Actions action = new Actions(driver);
+        Reporter.log(this.getClass().getSimpleName() + ": Click element: " + by.toString(),true);
+        action.moveToElement(element).click().perform();
+    }
+
+    /**
+     * 使用actions点击
+     *
+     * @param element
+     */
+    public void clickAction(WebElement element) {
+        Actions action = new Actions(driver);
+        Reporter.log(this.getClass().getSimpleName() + ": Click element: " + element.getText(),true);
+        action.moveToElement(element).click().perform();
+    }
+
+    /**
+     * 使用js点击
+     *
+     * @param element
+     */
+    public void clickByJS(WebElement element) {
+        JavascriptExecutor je = (JavascriptExecutor) this.driver;
+        je.executeScript("$(arguments[0]).click();", new Object[]{element});
     }
 
     /**
@@ -143,7 +183,7 @@ public abstract class BasePage {
             if (handles.equals(currentHandle)) {
                 this.driver.close();
             } else {
-                logger.info(this.getClass().getSimpleName() + ": Switch to: " + handles);
+                Reporter.log(this.getClass().getSimpleName() + ": Switch to: " + handles,true);
                 this.driver.switchTo().window(handles);
             }
         }
@@ -171,14 +211,14 @@ public abstract class BasePage {
         WebElement webElement = null;
 
         try {
-            logger.info(this.getClass().getSimpleName() + ": Find element：" + by.toString());
+            Reporter.log(this.getClass().getSimpleName() + ": Find element：" + by.toString(),true);
             webElement = (WebElement) (new WebDriverWait(this.driver, timeout)).until(ExpectedConditions.elementToBeClickable(by));
             return webElement;
         } catch (TimeoutException var6) {
-            logger.error(this.getClass().getSimpleName() + ": Can not find element: " + by.toString());
+            Reporter.log(this.getClass().getSimpleName() + ": Can not find element: " + by.toString(),true);
             throw new TimeoutException("没有找到元素: " + by.toString());
         } catch (NullPointerException var7) {
-            logger.error( this.getClass().getSimpleName() + ": Can not find element: " + by.toString());
+            Reporter.log(this.getClass().getSimpleName() + ": Can not find element: " + by.toString(),true);
             throw new NullPointerException("没有找到元素: " + by.toString());
         }
     }
@@ -203,15 +243,15 @@ public abstract class BasePage {
     public List<WebElement> findElementsWithTimeout(By by, long timeout) {
         List<WebElement> webElements = null;
         try {
-           logger.info(this.getClass().getSimpleName() + ": Find elements：" + by.toString());
+            Reporter.log(this.getClass().getSimpleName() + ": Find elements By：" + by.toString(),true);
             new WebDriverWait(this.driver, timeout).until(ExpectedConditions.presenceOfElementLocated(by));
             webElements = driver.findElements(by);
             return webElements;
         } catch (TimeoutException var6) {
-            logger.error( this.getClass().getSimpleName() + ": Can not find elements: " + by.toString());
+            Reporter.log(this.getClass().getSimpleName() + ": Can not find elements: " + by.toString(),true);
             throw new TimeoutException("没有找到元素: " + by.toString());
         } catch (NullPointerException var7) {
-            logger.error( this.getClass().getSimpleName() + ": Can not find elements: " + by.toString());
+            Reporter.log(this.getClass().getSimpleName() + ": Can not find elements: " + by.toString(),true);
             throw new NullPointerException("没有找到元素: " + by.toString());
         }
     }
@@ -223,7 +263,7 @@ public abstract class BasePage {
      */
     public void sleep(long millis) {
         try {
-           logger.info(this.getClass().getSimpleName() + ": Sleep in " + millis / 1000L + " seconds");
+            Reporter.log(this.getClass().getSimpleName() + ": Sleep in " + millis / 1000L + " seconds",true);
             Thread.sleep(millis);
         } catch (InterruptedException var4) {
             var4.printStackTrace();
@@ -235,8 +275,9 @@ public abstract class BasePage {
      * 保存pagesource，用于调试
      */
     public void savePageSource() {
-        String path = System.getProperty("user.dir") + "/src/java/report/PageSource.xml";
-
+        sleep(1500);
+        String path = System.getProperty("user.dir") + "\\src\\main\\java\\report\\PageSource.html";
+        Reporter.log(this.getClass().getSimpleName() + ": Save PageSource in：" + path,true);
         try {
             FileWriter writer = new FileWriter(path);
             writer.write(this.driver.getPageSource());
@@ -253,7 +294,7 @@ public abstract class BasePage {
      * @param by
      */
     public void waitForLoading(By by) {
-       logger.info(this.getClass().getSimpleName() + ": Waiting for loading：" + by.toString());
+        Reporter.log(this.getClass().getSimpleName() + ": Waiting for loading：" + by.toString(),true);
         for (int i = 0; i < 20; i++) {
             try {
                 new WebDriverWait(this.driver, 4).until(ExpectedConditions.elementToBeClickable(by));
@@ -272,7 +313,7 @@ public abstract class BasePage {
      */
     public void click(By by) {
         WebElement webElement = this.findElementWithTimeout(by);
-       logger.info(this.getClass().getSimpleName() + ": Click element: " + by.toString());
+        Reporter.log(this.getClass().getSimpleName() + ": Click element: " + by.toString() + ". Element's Text is: "+webElement.getText(),true);
         webElement.click();
     }
 
@@ -284,7 +325,7 @@ public abstract class BasePage {
      */
     public void sendKeys(By by, String text) {
         WebElement webElement = this.findElementWithTimeout(by);
-       logger.info(this.getClass().getSimpleName() + ": SendKeys to element: " + by.toString());
+        Reporter.log(this.getClass().getSimpleName() + ": Input Text: " + text + " to element: " + by.toString(),true);
         webElement.sendKeys(new CharSequence[]{text});
     }
 
@@ -296,9 +337,9 @@ public abstract class BasePage {
      */
     public void sendKeysAfterClear(By by, String text) {
         WebElement webElement = this.findElementWithTimeout(by);
-       logger.info(this.getClass().getSimpleName() + ": Clear text for element: " + by.toString());
+        Reporter.log(this.getClass().getSimpleName() + ": Clear text for element: " + by.toString(),true);
         webElement.clear();
-       logger.info(this.getClass().getSimpleName() + ": SendKeys to element: " + by.toString());
+        Reporter.log(this.getClass().getSimpleName() + ": Input Text: " + text + " to element: " + by.toString(),true);
         webElement.sendKeys(new CharSequence[]{text});
     }
 
@@ -310,7 +351,7 @@ public abstract class BasePage {
      */
     public String getText(By by) {
         WebElement webElement = this.findElementWithTimeout(by);
-       logger.info(this.getClass().getSimpleName() + ": Get Text in element: " + by.toString());
+        Reporter.log(this.getClass().getSimpleName() + ": Get Text: "+webElement.getText()+" in element: " + by.toString(),true);
         return webElement.getText();
     }
 
@@ -321,7 +362,8 @@ public abstract class BasePage {
 
     public String getAttr(By by, String attrKey) {
         WebElement webElement = this.findElementWithTimeout(by);
-       logger.info(this.getClass().getSimpleName() + ": Get " + attrKey + " in element: " + by.toString());
-        return webElement.getAttribute("value");
+        String value = webElement.getAttribute("value");
+        Reporter.log(this.getClass().getSimpleName() + ": Get Value:" + value + " by Key: " + attrKey + "in element: " +by.toString(),true);
+        return value;
     }
 }

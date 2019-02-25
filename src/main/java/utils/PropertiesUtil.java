@@ -55,6 +55,11 @@ public class PropertiesUtil {
         return value==null?null:loop(value);
     }
 
+    public static boolean getBool(String prop){
+        String value = props.getProperty(prop);
+        return Boolean.parseBoolean(value==null?null:loop(value));
+    }
+
     @SuppressWarnings("static-access")
     private static String loop(String key){
         //定义matcher匹配其中的路径变量
@@ -74,12 +79,12 @@ public class PropertiesUtil {
         return flag?loop(buffer.toString()):key;
     }
     public static void main(String[]  args) {
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         map.put("Mydate","Mydate444");
-            map.put("Mymonth","Mymonth444");
+        map.put("Mymonth","Mymonth444");
         map.put("Myyear","Myyear444");
         System.out.println("    [host] "+PropertiesUtil.get("host"));
         System.out.println("    [login_url] "+PropertiesUtil.getTranslate("login_url",null));
         System.out.println("    [login_url] "+PropertiesUtil.getTranslate("login_url",map));
-}
+    }
 }

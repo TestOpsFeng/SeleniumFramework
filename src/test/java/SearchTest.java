@@ -14,4 +14,13 @@ public class SearchTest extends BaseSetup {
         Assert.assertEquals(searchResult,generate);
     }
 
+    @Test(description = "搜索是否正常2")
+    public void testSearch2() {
+        String generate = ChineseNameGenerator.getInstance().generate();
+        baiduPage.clickSearch(generate);
+
+        String searchResult = baiduPage.getSearchResult();
+        Assert.assertEquals(searchResult,generate);
+    }
+
 }

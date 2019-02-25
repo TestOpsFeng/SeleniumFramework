@@ -1,39 +1,43 @@
 package listener;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.Reporter;
 
 public class MyITestListener implements ITestListener {
-    private static final Logger logger = LogManager.getLogger(ResolverUtil.Test.class.getName());
 
+    @Override
     public void onTestStart(ITestResult iTestResult) {
-        logger.info("Ready to exec: " + iTestResult.getMethod().getDescription());
+        Reporter.log("Ready to exec: " + iTestResult.getName() + "(). The desc is: " + iTestResult.getMethod().getDescription(), true);
     }
 
+    @Override
     public void onTestSuccess(ITestResult iTestResult) {
 
     }
 
+    @Override
     public void onTestFailure(ITestResult iTestResult) {
 
     }
 
+    @Override
     public void onTestSkipped(ITestResult iTestResult) {
 
     }
 
+    @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult iTestResult) {
 
     }
 
+    @Override
     public void onStart(ITestContext iTestContext) {
 
     }
 
+    @Override
     public void onFinish(ITestContext iTestContext) {
 
     }
