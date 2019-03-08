@@ -6,7 +6,7 @@
 5. 使用properties，测试数据与测试代码分离
 6. 继承了[binarywang](https://github.com/binarywang/java-testdata-generator)的随机数据生成器
 
-###使用
+### 使用
 通过Maven运行：
 ```
 mvn clean
@@ -50,7 +50,7 @@ public class BaiduPage extends BasePage {
 
 }
 ```
-###PropertiesUtil使用
+### PropertiesUtil使用
 ```properties
 searchText=Selenium
 host = www.baidu.com
@@ -63,4 +63,4 @@ PropertiesUtil.get("baiduPageUrl");
 
 ### 报告样式
 在Report中记录了操作过程，方便定位Exception：
-![Alt text](../ptah_web_cloud/report.png "测试报告")
+![Alt text](../SeleniumFramework/report.png "测试报告")
