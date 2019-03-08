@@ -63,4 +63,4 @@ PropertiesUtil.get("baiduPageUrl");
 
 ### 报告样式
 在Report中记录了操作过程，方便定位Exception：
-![Alt text](../SeleniumFramework/report.png "测试报告")
+![Alt text](../report.png "测试报告")
