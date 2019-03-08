@@ -60,7 +60,7 @@ baiduPageUrl= https://${host}
 ```java
 PropertiesUtil.get("baiduPageUrl");
 ```
-C:\Users\qvzn0\IdeaProjects\SeleniumPOFramework\report.png
+
 ### 报告样式
 在Report中记录了操作过程，方便定位Exception：
-![Alt text](../SeleniumPOFramework/report.png "测试报告")
+![Alt text](./report.png "测试报告")
