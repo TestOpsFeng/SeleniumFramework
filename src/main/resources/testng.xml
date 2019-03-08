@@ -10,21 +10,19 @@
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name="SearchTest">
-                <!--<methods>-->
-                <!--&lt;!&ndash;<include name="testEditCustomWorkerSelect"/>&ndash;&gt;-->
-                <!--<include name="testEditDate"/>-->
-                <!--</methods>-->
+                <methods>
+                <include name="testSearch2"/>
+                </methods>
             </class>
         </classes>
     </test> <!-- Test -->
     <test verbose="2" preserve-order="true" name="firfox">
-        <parameter name="browser" value="firefox"/>
+        <parameter name="browser" value="firefox"/>  <!--参数：name必须为browser，value有3个可选：chrome,firefox,edge，分别对应不同浏览器-->
         <classes>
             <class name="SearchTest">
-                <!--<methods>-->
-                <!--&lt;!&ndash;<include name="testEditCustomWorkerSelect"/>&ndash;&gt;-->
-                <!--<include name="testEditInput"/>-->
-                <!--</methods>-->
+                <methods>
+                <include name="testSearch"/>
+                </methods>
             </class>
         </classes>
     </test> <!-- Test -->
