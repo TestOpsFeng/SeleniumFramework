@@ -9,6 +9,7 @@ import page.BasePage;
  * 子类，变量管理元素，方法封装行为
  */
 public class BaiduPage extends BasePage {
+    //成员变量控制元素
     private By input_serch = By.id("kw");
     private By btn_search = By.xpath("//input[@value=\"百度一下\"]");
     private By first_search_result = By.xpath("//div[@id=\"1\"]/h3");
@@ -16,6 +17,7 @@ public class BaiduPage extends BasePage {
         super(driver);
     }
 
+    //方法控制行为
     public void clickSearch(String searchText) {
         sendKeys(input_serch,searchText);
         click(btn_search);
